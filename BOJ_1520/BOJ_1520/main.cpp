@@ -22,46 +22,43 @@
  */
 
 #include <iostream>
+#include <memory.h>
 
-#define MAX_M 10
-#define MAX_N 10
+#define MAX_M 5
+#define MAX_N 5
+
+int M, N;
+int dp[MAX_M][MAX_N];
+int map[MAX_M][MAX_N];
+//int visited[MAX_M][MAX_N] = {0};
 
 void dfs(int x, int y) {
-  
+  //visited[x][y] = 1;
+  dp[x][y] ++;
+  if(x >= M && y >= N)
+    return;
+  // 오른쪽으로 이동 가능한가
+  if(map[x][y] > map[x][y+1] && (y + 1) < N)
+    dfs(x, y + 1);
+  // 왼쪽으로 이동 가능한가
+  if(map[x][y] > map[x][y-1] && (y - 1) > 0)
+    dfs(x, y - 1);
+  // 밑으로 이동 가능한가
+  if(map[x][y] > map[x+1][y] && (x + 1) < M)
+    dfs(x + 1, y);
+  //위로 이동 가능한가
+  if(map[x][y] > map[x-1][y] && (x - 1) > 0)
+    dfs(x - 1, y);
 }
 
 int main(int argc, const char * argv[]) {
-  int M, N;
-  int dp[MAX_M][MAX_N] = {0};
-  int map[MAX_M][MAX_N];
-  int visited[MAX_M][MAX_N];
-  
   std::cin >> M >> N;
-  
+  memset(dp, -1, sizeof(dp));
   //지도 초기화
   for(int i = 0; i < M; i++)
     for(int j = 0; j < N; j++)
-      std::cin >> map[i][j];
-  dp[0][0] = 1;
-  for(int i = 0; i < M; i++){
-    for(int j = 0; j < N; j++) {
-      //(i, j)가 0이 아닐때만 카운트 가능
-      if(dp[i][j]) {
-        // 오른쪽으로 이동 가능한가
-        if(map[i][j] > map[i][j+1] && (j + 1) < N)
-          dp[i][j+1] ++;
-        // 왼쪽으로 이동 가능한가
-        if(map[i][j] > map[i][j-1] && (j - 1) > 0)
-          dp[i][j-1] ++;
-        // 밑으로 이동 가능한가
-        if(map[i][j] > map[i+1][j] && (i + 1) < M)
-          dp[i+1][j] ++;
-        //위로 이동 가능한가
-        if(map[i][j] > map[i-1][j] && (i - 1) > 0)
-          dp[i-1][j] ++;
-      }
-    }
-  }
+      scanf("%d", &map[i][j]);
+  dfs(0, 0);
   std::cout << dp[M-1][N-1] << std::endl;
   return 0;
 }
