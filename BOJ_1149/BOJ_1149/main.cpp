@@ -13,37 +13,19 @@
 #include <algorithm>
 
 using namespace std;
-
 #define MAX 1000
 
 int main(int argc, const char * argv[]) {
   int N, R, G, B;
   cin >> N;
   int dp[MAX][3];
-  int from[MAX][3];
   cin >> dp[0][0] >> dp[0][1] >> dp[0][2];
-  from[0][0] = 0;
-  from[0][1] = 1;
-  from[0][2] = 2;
   for(int i = 1; i < N; i++) {
     cin >> R >> G >> B;
-    if(from[i-1][0] != 0) {
-      dp[i][0] = min(dp[i-1][1] + R, dp[i-1][0] + R);
-    }
-    else {
-      dp[i][0] = dp[i-1][1] + R;
-      from[i][0] = 1;
-    }
-    if(from[i-1][1] != 1) {
-      dp[i][0] = min(dp[i-1][1] + R, dp[i-1][0] + R);
-    }
-    else {
-      dp[i][0] = dp[i-1][1] + R;
-    }
-    if(from[i-1][0] != 0) {
-      dp[i][0] = min(dp[i-1][1] + R, dp[i-1][0] + R);
-    }
-    else dp[i][0] = dp[i-1][1] + R;
+    dp[i][0] = min(dp[i-1][1] + R, dp[i-1][2] + R);
+    dp[i][1] = min(dp[i-1][0] + G, dp[i-1][2] + G);
+    dp[i][2] = min(dp[i-1][1] + B, dp[i-1][0] + B);
   }
+  cout << min(dp[N-1][0], min(dp[N-1][1], dp[N-1][2])) << endl;
   return 0;
 }
