@@ -11,71 +11,34 @@
 
 #include <iostream>
 using namespace std;
-
-class anniversary {
-private:
-  int year;
-  int month;
-  int day;
-public:
-  string getAnniversary(int foretime) {
-    year = 2014; month = 1; day = 1;
-    int daysFromNewYear = 31 + 28 + 31 + 2 + foretime;
-    while(true){
-      int curDaysInYear = getDaysOfYear(year);
-      int curDaysInMonth = getNumOfDaysInMonth(year, month);
-      if(daysFromNewYear >= curDaysInYear) {
-        daysFromNewYear -= curDaysInYear;
-        year += 1;
-      }
-      else if (daysFromNewYear >= curDaysInMonth) {
-        daysFromNewYear -= curDaysInMonth;
-        if(month == 12)
-          month = 1;
-        else
-          month += 1;
-      } else {
-        day = daysFromNewYear - 1;
-        break;
-      }
-    }
-    return toString();
-  };
-  
-  bool isLeapYear(int _year) {
-    if((_year % 4) == 0 && (_year % 100) != 0) return true;
-    if((_year % 400) == 0) return true;
-    else return false;
-  }
-  
-  int getDaysOfYear(int _year) {
-    if(isLeapYear(_year)) return 366;
-    else return 365;
-  }
-  
-  int getNumOfDaysInMonth(int _year, int _month) {
-    if(_month == 1 || _month == 3 || _month == 5 || _month == 7
-       || _month == 8 || _month == 10 || _month == 12) return 31;
-    else if(_month == 2) {
-      if(isLeapYear(_year)) return 29;
-      else return 28;
-    } else return 30;
-  }
-  string toString() {
-    string date;
-    date += to_string(year);
-    if (month < 10) date += "-0" + to_string(month);
-    else date += "-" + to_string(month);
-    if (day < 10) date += "-0" + to_string(day);
-    else date += "-" + to_string(day);
-    return date;
-  }
-};
-
 int main(int argc, const char * argv[]) {
   int days;
-  anniversary a;
   cin >> days;
-  cout << a.getAnniversary(days) << endl;
+  int year = 2014, month = 1, day = 1;
+  int months[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+  int yDays = 0;
+  days += 91;
+  while(days != 0) {
+    //윤년
+    if((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+      months[2] = 29;
+      yDays = 366;
+    } else {
+      months[2] = 28; yDays = 365;
+    }
+    if(days > yDays) {days -= yDays; year ++;}
+    else if(days > months[month]) {
+      days -= months[month];
+      month ++;
+    } else {
+      day = days;
+      days = 0;
+    }
+  }
+  cout << year;
+  if(month < 10) cout << "-0" << month;
+  else cout << "-" << month;
+  if(day < 10) cout << "-0" << day;
+  else cout << "-" << day;
   return 0;
 }
