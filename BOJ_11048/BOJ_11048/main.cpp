@@ -22,34 +22,36 @@
  */
 
 #include <iostream>
-
-#define MAX_N 1000
-#define MAX_M 1000
+using namespace std;
+#define MAX_N 1001
+#define MAX_M 1001
 
 int main(int argc, const char * argv[]) {
   int n, m;
   int maze[MAX_N][MAX_M];
-  int dp[MAX_N][MAX_M] = {0};
-  std::cin >> n >> m;
+  int dp[MAX_N][MAX_M];
+  cin >> n >> m;
   
   //NxM 미로 입력받기
-  for(int i = 0; i < n; i++) {
-    for(int j = 0; j < m; j++)
-      std::cin >> maze[i][j];
+  for(int i = 1; i <= n; i++) {
+    for(int j = 1; j <= m; j++) {
+      cin >> maze[i][j];
+      dp[i][j] = 0;
+    }
   }
   //시작점 초기화
-  dp[0][0] = maze[0][0];
+  dp[1][1] = maze[1][1];
   //DP를 이용하여 최대 사탕갯수 업데이트
-  for(int i = 0; i < n; i++) {
-    for(int j = 0; j < m; j++) {
-      if((dp[i][j+1] < dp[i][j] + maze[i][j+1]) && (j + 1) != m)
+  for(int i = 1; i <= n; i++) {
+    for(int j = 1; j <= m; j++) {
+      if((dp[i][j+1] < dp[i][j] + maze[i][j+1]) && j != m)
         dp[i][j+1] = dp[i][j] + maze[i][j+1]; // (r, c+1)의 최댓값
-      if(dp[i+1][j] < dp[i][j] + maze[i+1][j] && (i + 1) != n)
+      if(dp[i+1][j] < dp[i][j] + maze[i+1][j] && i != n)
         dp[i+1][j] = dp[i][j] + maze[i+1][j]; // (r+1, c)의 최댓값
-      if(dp[i+1][j+1] < dp[i][j] + maze[i+1][j+1] && (j + 1) != m && (i + 1) != n)
+      if(dp[i+1][j+1] < dp[i][j] + maze[i+1][j+1] && j != m && i != n)
        dp[i+1][j+1] = dp[i][j] + maze[i+1][j+1]; // (r+1, c+1)의 최댓값
     }
   }
-  std::cout << dp[n-1][m-1] << std::endl;
+  cout << dp[n][m] << endl;
   return 0;
 }
