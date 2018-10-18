@@ -16,39 +16,39 @@
  */
 #include <iostream>
 
-void print(int *arr, int);
-void swap(int *arr, int i, int depth) ;
-void perm(int *arr, int depth, int n, int k) {
-  if (depth == k) {
-    print(arr, k);
+void swap(int *, int, int);
+void print_arr(int *, int);
+
+void perm(int *arr, int len, int n, int k) {
+  if(len == k) {
+    print_arr(arr, len);
     return;
   }
-  for (int i = depth; i < n; i++) {
-    swap(arr, i, depth);
-    perm(arr, depth + 1, n, k);
-    swap(arr, i, depth);
+  for(int i = len; i < n; i++) {
+    swap(arr, len, i);
+    perm(arr, len + 1, n, k);
+    swap(arr, len, i);
   }
 }
 
-void print(int *arr, int k) {
-  for (int i = 0; i < k; i++) {
-    if (i == k - 1)
-      std::cout << arr[i] << std::endl;
-    else printf("%d ", arr[i]);
-  }
-}
-
-void swap(int* arr, int i, int j) {
+void swap(int *arr, int i, int j) {
   int temp = arr[i];
   arr[i] = arr[j];
   arr[j] = temp;
 }
-
-int main(int argc, const char * argv[]) {
+void print_arr(int *arr, int k) {
+  for (int i = 0; i < k; i++) {
+    if (i == k - 1)
+      printf("%d\n", arr[i]);
+    else
+      printf("%d ", arr[i]);
+  }
+}
+int main() {
   int N, M;
   int arr[8];
-  std::cin >> N >> M;
-  for(int i = 0; i < N; i++) arr[i] = i + 1;
+  scanf("%d %d", &N, &M);
+  for(int i = 1; i <= N; i++) arr[i-1] = i;
   perm(arr, 0, N, M);
   return 0;
 }
