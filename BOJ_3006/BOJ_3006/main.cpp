@@ -23,39 +23,67 @@
 //각 단계에서 숫자의 위치를 몇 번 바꾸는지 출력한다. 총 N줄을 출력해야 한다.
 
 #include <iostream>
-#include <vector>
-#define MAX 100001
+#include <cstdio>
+#include <algorithm>
+
 using namespace std;
-int main(int argc, const char * argv[]) {
-  int N, tmp, cnt;
-  int idx;
-  scanf("%d", &N);
-  vector<int> arr(N+1);
-  for(int i = 1; i <= N; i++) scanf("%d", &arr[i]);
-  for(int i = 1; i <= N; i++) {
-    cnt = 0;
-    if(i % 2 == 1) {
-      idx = (i/2) + 1;
-      while((i/2 + 1) != arr[idx]){idx++;}
-      while(idx > (i/2 + 1)) {
-        tmp = arr[idx-1];
-        arr[idx-1] = arr[idx];
-        arr[idx] = tmp;
-        idx --;
-        cnt ++;
-      }
-      cout << cnt << endl;
-    } else {
-      idx = N - (i/2 - 1);
-      while(N - (i/2 - 1) != arr[idx]){idx--;}
-      while(idx < N - (i/2 - 1)) {
-        tmp = arr[idx+1];
-        arr[idx+1] = arr[idx];
-        arr[idx] = tmp;
-        idx ++;
-        cnt ++;
-      }
-      cout << cnt << endl;
+typedef pair<int, int> pii;
+
+pii arr[100002];
+int tree[100002];
+int n;
+
+void update(int i, int diff)
+{
+  while (i <= n)
+  {
+    tree[i] += diff;
+    i += (i & -i);
+  }
+}
+
+int sum(int i)
+{
+  int ans = 0;
+  
+  while (i > 0)
+  {
+    ans += tree[i];
+    i -= (i & -i);
+  }
+  
+  return ans;
+}
+
+int main()
+{
+  scanf("%d", &n);
+  
+  for (int i = 1; i <= n; i++)
+  {
+    scanf("%d", &arr[i].first);
+    arr[i].second = i;
+    
+    update(i, 1);
+  }
+  
+  sort(arr, arr + n + 1);
+  
+  int p1 = 1, p2 = n;
+  for (int i = 1; i <= n; i++)
+  {
+    if (i % 2 == 1)
+    {
+      printf("%d\n", sum(arr[p1].second) - 1);
+      update(arr[p1].second, -1);
+      p1++;
+    }
+    
+    else
+    {
+      printf("%d\n", sum(n) - sum(arr[p2].second - 1) - 1);
+      update(arr[p2].second, -1);
+      p2--;
     }
   }
   return 0;
