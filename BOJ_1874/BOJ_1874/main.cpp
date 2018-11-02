@@ -10,52 +10,48 @@
 // 입력된 수열을 만들기 위해 필요한 연산을 한 줄에 한 개씩 출력한다. push연산은 +로, pop 연산은 -로 표현하도록 한다. 불가능한 경우 NO를 출력한다.
 
 #include <iostream>
-#include <stack>
 #include <vector>
-
 using namespace std;
 
-stack<int> _stack;
-vector<char> _vector;
-int _index = 1;
-
-void pushToStackUntil(int dest) {
-  while(_index <= dest) {
-    _stack.push(_index++);
-    _vector.push_back('+');
-  }
-  _stack.pop();
-  _vector.push_back('-');
-}
-
-void print_queue() {
-  vector<char>::iterator iter;
-  for(iter = _vector.begin(); iter != _vector.end(); iter++) cout << *iter << endl;
-}
-
-int main(int argc, const char * argv[]) {
-  
-  int n, *sequence;
-  cin >> n;
-  sequence = new int(n+1);
-  cin >> sequence[0];
-  pushToStackUntil(sequence[0]);
-  
-  for(int i = 2; i <= n; i++) {
-    cin >> sequence[i-1];
-    if(sequence[i-1] < sequence[i-2]) {
-      if(_stack.top() == sequence[i-1]) {
-        _stack.pop();
-        _vector.push_back('-');
-      } else {
-        cout << "NO\n";
-        return 0;
+int main(){
+  vector<int> stack;
+  vector<char> seq;
+  int n,a,curVal=1;
+  bool isWrong=false;
+  cin>>n;
+  while(n--){
+    scanf("%d",&a);
+    if(!stack.empty()){
+      if(stack[stack.size()-1]==a){
+        stack.pop_back();
+        seq.push_back('-');
+      }
+      else if(a>stack[stack.size()-1]){
+        for(int i=curVal;i<=a;i++){
+          stack.push_back(i);
+          seq.push_back('+');
+          curVal+=1;
+        }
+        stack.pop_back();
+        seq.push_back('-');
+      }
+      else {
+        isWrong=true;
+        break;
       }
     } else {
-      pushToStackUntil(sequence[i-1]);
+      for(int i=curVal;i<=a;i++){
+        stack.push_back(i);
+        seq.push_back('+');
+        curVal+=1;
+      }
+      stack.pop_back();
+      seq.push_back('-');
     }
   }
-  print_queue();
-  delete sequence;
+  if(isWrong) cout<<"NO\n";
+  else {
+    for(int i=0;i<seq.size();i++) printf("%c\n",seq[i]);
+  }
   return 0;
 }
