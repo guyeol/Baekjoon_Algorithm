@@ -16,21 +16,61 @@
 #include <algorithm>
 using namespace std;
 
-int main(int argc, const char * argv[]) {
-  int n;
-  int max = 0;
-  cin >> n;
-  int board[20][20];
-  
-  for (int i = 0; i < n; i++) {
+int board[20][20], n;
+
+void up () {
+  for (int i = 1; i < n; i++) {
     for (int j = 0; j < n; j++) {
-      scanf("%d",&board[i][j]);
+      if (board[i][j] != 0) {
+        
+      }
     }
   }
+}
+
+void down () {
   
-  for (int i = 0; i < 5; i++) {
+}
+
+void left () {
+  
+}
+
+void right () {
+  
+}
+
+void dfs (int dir, int depth) {
+  
+  if (depth == 0) {
     
   }
+  
+  for (int i = 0; i < 4; i++) {
+    switch (i) {
+      case 0:
+        up();
+        break;
+      case 1:
+        down();
+        break;
+      case 2:
+        left();
+        break;
+      case 3:
+        right();
+        break;
+    }
+  }
+}
+
+int main(int argc, const char * argv[]) {
+  cin >> n;
+  
+  for (int i = 0; i < n; i++)
+    for (int j = 0; j < n; j++)
+      scanf("%d", &board[i][j]);
+  dfs(0, 5);
   
   return 0;
 }
